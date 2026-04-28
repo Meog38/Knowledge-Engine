@@ -1,4 +1,5 @@
 import csv
+import re
 
 def clean_string(s):
     if not s:
@@ -6,11 +7,13 @@ def clean_string(s):
     
     s = str(s).lower().strip()
     s = s.replace(' ', '_').replace('-', '_').replace('.', '')
+    # Remove qualquer caractere que não seja letra minúscula, número ou underscore
+    s = re.sub(r'[^a-z0-9_]', '', s)
     
     if s and s[0].isdigit():
         s = 'c_' + s
     
-    return s
+    return s if s else 'null'
 
 def clean_number(n):
     try:
@@ -55,7 +58,7 @@ def main():
             contador += 1
 
             # limita tamanho da base
-            if contador >= 150:
+            if contador >= 500:
                 break
 
     print(f"Sucesso! {contador} predicados foram gerados no arquivo 'base_conhecimento.pl'.")
